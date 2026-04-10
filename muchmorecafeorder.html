@@ -62,8 +62,7 @@
                     </label>
                 </div>
 
-                <input type="text" id="customerName" placeholder="您的稱呼 *" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm">
-                <input type="text" id="tableNumber" placeholder="內用桌號 *" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm">
+                <input type="text" id="tableNumber" placeholder="內用桌號(外桌or內桌)*" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm">
                 <textarea id="customerNote" rows="1" placeholder="備註" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm"></textarea>
 
                 <div class="pt-2">
@@ -107,24 +106,27 @@
 
         const menuItems = [
             { id: 'c1', name: '美式咖啡', price: 80, type: 2, desc: '經典黑咖啡', img: 'https://placehold.co/100x100/3e2723/fff?text=Americano' },
-            { id: 'c2', name: '拿鐵咖啡', price: 110, type: 2, desc: '濃縮咖啡與鮮奶', img: 'https://placehold.co/100x100/5d4037/fff?text=Latte' },
-            { id: 'c3', name: '摩卡咖啡', price: 120, type: 2, desc: '巧克力風味咖啡', img: 'https://placehold.co/100x100/4e342e/fff?text=Mocha' },
-            { id: 't1', name: '精選紅茶', price: 50, type: 2, desc: ' ', img: 'https://placehold.co/100x100/b71c1c/fff?text=BlackTea' },
-            { id: 't2', name: '紅茶拿鐵', price: 80, type: 2, desc: '精選紅茶與鮮奶', img: 'https://placehold.co/100x100/a1887f/fff?text=MilkTea' },
-            { id: 'd1', name: '可可牛奶', price: 60, type: 2, desc: '香濃巧克力牛奶', img: 'https://placehold.co/100x100/3e2723/fff?text=Cocoa' },
-            { id: 'h1', name: '高山冬片茶', price: 60, type: 1, desc: '現泡熱茶', img: 'https://placehold.co/100x100/689f38/fff?text=Tea' },
-            { id: 'h2', name: '草莓風味果茶', price: 70, type: 1, desc: '酸甜莓果香氣', img: 'https://placehold.co/100x100/e91e63/fff?text=BerryTea' },
-            { id: 'h3', name: '麝香葡萄風味茶', price: 80, type: 1, desc: '濃郁葡萄果香', img: 'https://placehold.co/100x100/8e24aa/fff?text=GrapeTea' },
-            { id: 'ice1', name: '夏戀', price: 100, type: 0, desc: '紅茶基底果醋特調', img: 'https://placehold.co/100x100/039be5/fff?text=Summer' },
-            { id: 'ice2', name: '阿尼亞', price: 150, type: 0, desc: '咖啡基底乳酸特調', img: 'https://placehold.co/100x100/ff6f00/fff?text=Anya' },
-            { id: 'ice3', name: '可爾必思', price: 50, type: 0, desc: '酸甜乳酸飲料', img: 'https://placehold.co/100x100/f5f5f5/333?text=Calpis' },
-            { id: 'f1', name: '原味鬆餅', price: 40, type: null, desc: ' ', img: 'https://placehold.co/100x100/ffb74d/fff?text=Waffle' },
-            { id: 'f2', name: '榛果巧克力鬆餅', price: 60, type: null, desc: '巧克力醬', img: 'https://placehold.co/100x100/5d4037/fff?text=ChocoWaffle' },
-            { id: 'f3', name: '草莓鬆餅', price: 60, type: null, desc: '草莓醬', img: 'https://placehold.co/100x100/e91e63/fff?text=BerryWaffle' },
-            { id: 'f4', name: '麻糬鬆餅', price: 80, type: null, desc: '內餡Q彈麻糬', img: 'https://placehold.co/100x100/fff9c4/333?text=Mochi' },
-            { id: 'f5', name: '嘉年華鬆餅', price: 100, type: null, desc: '三種味道一次滿足', img: 'https://placehold.co/100x100/f48fb1/fff?text=Carnival' },
-            { id: 's1', name: '布丁', price: 60, type: null, desc: '手工焦糖布丁', img: 'https://placehold.co/100x100/ffecb3/333?text=Pudding' },
-            { id: 's2', name: '香魚片', price: 50, type: null, desc: '涮嘴小零食', img: 'https://placehold.co/100x100/ef5350/fff?text=Fish' }
+            { id: 'c2', name: '拿鐵咖啡', price: 120, type: 2, desc: '濃縮咖啡與鮮奶', img: 'https://placehold.co/100x100/5d4037/fff?text=Latte' },
+            { id: 'c3', name: '摩卡咖啡', price: 130, type: 2, desc: '巧克力風味咖啡', img: 'https://placehold.co/100x100/4e342e/fff?text=Mocha' },
+            { id: 't1', name: '可可牛奶', price: 50, type: 2, desc: '香濃巧克力與無乳糖牛奶', img: 'https://placehold.co/100x100/b71c1c/fff?text=Cocoa' },
+            { id: 't2', name: '紅茶拿鐵', price: 80, type: 2, desc: '精選紅茶與無乳糖牛奶', img: 'https://placehold.co/100x100/a1887f/fff?text=TeaLatte' },
+            { id: 'd1', name: '可可牛奶', price: 60, type: 2, desc: '精選紅茶與無乳糖牛奶', img: 'https://placehold.co/100x100/3e2723/fff?text=GreenTeaLatte' },
+            { id: 'h1', name: '高山冬片茶', price: 100, type: 1, desc: '現泡熱茶', img: 'https://placehold.co/100x100/689f38/fff?text=Tea' },
+            { id: 'h2', name: '草莓風味果茶', price: 120, type: 1, desc: '酸甜莓果香氣', img: 'https://placehold.co/100x100/e91e63/fff?text=BerryTea' },
+            { id: 'h3', name: '麝香葡萄風味茶', price: 150, type: 1, desc: '濃郁葡萄果香', img: 'https://placehold.co/100x100/8e24aa/fff?text=GrapeTea' },
+            { id: 'ice1', name: '可爾必思', price: 50, type: 0, desc: '乳酸氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Calpis' },
+            { id: 'ice2', name: '春梅', price: 100, type: 0, desc: '青梅醋氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Plum' },
+            { id: 'ice3', name: '夏戀', price: 100, type: 0, desc: '石榴醋氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Pomegranate' },
+            { id: 'ice4', name: '阿尼亞', price: 150, type: 0, desc: '咖啡基底乳酸氣泡特調', img: 'https://placehold.co/100x100/ff6f00/fff?text=Anya' },
+            { id: 'f1', name: '原味鬆餅', price: 50, type: null, desc: ' ', img: 'https://placehold.co/100x100/ffb74d/fff?text=Waffle' },
+            { id: 'f2', name: '榛果巧克力鬆餅', price: 70, type: null, desc: '榛果巧克力醬', img: 'https://placehold.co/100x100/5d4037/fff?text=ChocoWaffle' },
+            { id: 'f3', name: '草莓果醬鬆餅', price: 70, type: null, desc: '草莓果醬', img: 'https://placehold.co/100x100/e91e63/fff?text=BerryWaffle' },
+            { id: 'f4', name: 'Ｑ心麻糬鬆餅', price: 100, type: null, desc: '內餡Q彈麻糬', img: 'https://placehold.co/100x100/fff9c4/333?text=Mochi' },
+            { id: 'f5', name: '嘉年華鬆餅', price: 120, type: null, desc: '三種味道一次滿足', img: 'https://placehold.co/100x100/f48fb1/fff?text=Carnival' },
+            { id: 's1', name: '香絲(小)', price: 30, type: null, desc: '烘烤鱈魚香絲', img: 'https://placehold.co/100x100/ffecb3/333?text=Codfish' },
+            { id: 's2', name: '香絲(大)', price: 60, type: null, desc: '烘烤鱈魚香絲', img: 'https://placehold.co/100x100/ffecb3/333?text=Codfish' },
+            { id: 's3', name: '香魚片', price: 60, type: null, desc: '涮嘴小零食', img: 'https://placehold.co/100x100/ffecb3/333?text=Fish' },
+            { id: 's4', name: '多肉布丁', price: 70, type: null, desc: '手工焦糖布丁', img: 'https://placehold.co/100x100/ef5350/fff?text=Pudding' }
         ];
 
         let cart = {}; 
