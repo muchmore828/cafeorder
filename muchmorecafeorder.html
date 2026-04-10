@@ -24,10 +24,13 @@
         .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
         .open { background-color: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
         .closed { background-color: #9E9E9E; }
-        .payment-option input:checked + div, .type-option input:checked + div {
+        
+        /* 選項選中樣式優化 */
+        .option-card input:checked + div {
             border-color: #2E7D32;
             background-color: #E8F5E9;
             color: #1B5E20;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
     </style>
 </head>
@@ -45,42 +48,56 @@
         </div>
     </div>
 
-    <div class="px-4 py-4 grid gap-4" id="menu-container"></div>
+    <div class="px-4 py-4">
+        <div class="grid grid-cols-3 gap-2">
+            <label class="option-card cursor-pointer text-center">
+                <input type="radio" name="orderType" value="內用(外桌)" class="hidden" checked>
+                <div class="border border-gray-200 bg-white rounded-xl py-3 transition-all">
+                    <div class="text-lg">🌳</div>
+                    <div class="text-xs font-bold">內用(外桌)</div>
+                </div>
+            </label>
+            <label class="option-card cursor-pointer text-center">
+                <input type="radio" name="orderType" value="內用(內桌)" class="hidden">
+                <div class="border border-gray-200 bg-white rounded-xl py-3 transition-all">
+                    <div class="text-lg">🛋️</div>
+                    <div class="text-xs font-bold">內用(內桌)</div>
+                </div>
+            </label>
+            <label class="option-card cursor-pointer text-center">
+                <input type="radio" name="orderType" value="外帶" class="hidden">
+                <div class="border border-gray-200 bg-white rounded-xl py-3 transition-all">
+                    <div class="text-lg">🛍️</div>
+                    <div class="text-xs font-bold">外帶</div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <div class="px-4 pb-4 grid gap-4" id="menu-container"></div>
 
     <div class="px-4 mt-2">
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-700 mb-3 border-b pb-2">📋 訂購資訊</h3>
-            <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-3 mb-2">
-                    <label class="type-option cursor-pointer">
-                        <input type="radio" name="orderType" value="內用" class="hidden" checked onchange="updateOrderType()">
-                        <div class="border border-gray-200 rounded-lg p-2 text-center text-sm font-bold text-gray-500 transition-all">🍽️ 內用</div>
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+            <div>
+                <h3 class="font-bold text-gray-700 mb-2 text-sm">📝 訂單備註</h3>
+                <textarea id="customerNote" rows="2" placeholder="調整冰塊甜度或特殊需求..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm"></textarea>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-gray-700 mb-2 text-sm">💳 付款方式</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="option-card cursor-pointer">
+                        <input type="radio" name="payment" value="現金" class="hidden" checked onchange="updatePaymentHint()">
+                        <div class="border border-gray-200 rounded-lg p-3 text-center text-sm font-bold text-gray-500 transition-all">💵 現金支付</div>
                     </label>
-                    <label class="type-option cursor-pointer">
-                        <input type="radio" name="orderType" value="外帶" class="hidden" onchange="updateOrderType()">
-                        <div class="border border-gray-200 rounded-lg p-2 text-center text-sm font-bold text-gray-500 transition-all">🛍️ 外帶</div>
+                    <label class="option-card cursor-pointer">
+                        <input type="radio" name="payment" value="LINE Pay" class="hidden" onchange="updatePaymentHint()">
+                        <div class="border border-gray-200 rounded-lg p-3 text-center text-sm font-bold text-gray-500 transition-all">💳 LINE Pay</div>
                     </label>
                 </div>
-
-                <input type="text" id="tableNumber" placeholder="內用桌號(外桌 or 內桌)*" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm">
-                <textarea id="customerNote" rows="1" placeholder="備註" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm"></textarea>
-
-                <div class="pt-2">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">付款方式</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="payment-option cursor-pointer">
-                            <input type="radio" name="payment" value="現金" class="hidden" checked onchange="updatePaymentHint()">
-                            <div class="border border-gray-200 rounded-lg p-3 text-center text-sm font-bold text-gray-500 transition-all">💵 現金支付</div>
-                        </label>
-                        <label class="payment-option cursor-pointer">
-                            <input type="radio" name="payment" value="LINE Pay" class="hidden" onchange="updatePaymentHint()">
-                            <div class="border border-gray-200 rounded-lg p-3 text-center text-sm font-bold text-gray-500 transition-all">💳 LINE Pay</div>
-                        </label>
-                    </div>
-                    <p id="payment-hint" class="text-xs text-red-500 mt-2 hidden bg-red-50 p-2 rounded border border-red-100">
-                        ⚠️ 使用 LINE Pay，請至櫃檯掃描收款碼。
-                    </p>
-                </div>
+                <p id="payment-hint" class="text-xs text-red-500 mt-2 hidden bg-red-50 p-2 rounded border border-red-100">
+                    ⚠️ 使用 LINE Pay，請至櫃檯掃描收款碼。
+                </p>
             </div>
         </div>
     </div>
@@ -96,7 +113,7 @@
                 </div>
             </div>
         </div>
-        <button onclick="submitOrder()" id="submit-btn" class="w-full bg-stone-700 text-white font-bold py-3 rounded-xl shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+        <button onclick="submitOrder()" id="submit-btn" class="w-full bg-stone-700 text-white font-bold py-3 rounded-xl shadow-md disabled:bg-gray-300" disabled>
             請先選擇商品
         </button>
     </div>
@@ -142,8 +159,7 @@
             const hour = now.getHours();
             const day = now.getDay();
             const statusEl = document.getElementById('shop-status');
-
-            if (day === 1) { // 每週一公休
+            if (day === 1) {
                 statusEl.innerHTML = '<span class="status-dot closed"></span> 今日公休';
             } else if (hour >= 14 && hour < 19) {
                 statusEl.innerHTML = '<span class="status-dot open"></span> 營業中';
@@ -160,7 +176,7 @@
                 if (item.type === 2) {
                     controls = `
                         <div class="flex items-center justify-between mt-2">
-                            <span class="text-xs font-bold text-red-500 mr-2 border border-red-200 px-1 rounded bg-red-50">熱飲</span>
+                            <span class="text-[10px] font-bold text-red-500 border border-red-200 px-1 rounded bg-red-50">熱飲</span>
                             <div class="flex items-center">
                                 <div class="qty-btn minus-btn" onclick="updateCart('${item.id}', 'hot', -1)">-</div>
                                 <span class="mx-2 font-bold w-4 text-center text-sm" id="qty-${item.id}-hot">0</span>
@@ -168,7 +184,7 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-between mt-2">
-                            <span class="text-xs font-bold text-blue-500 mr-2 border border-blue-200 px-1 rounded bg-blue-50">冰飲</span>
+                            <span class="text-[10px] font-bold text-blue-500 border border-blue-200 px-1 rounded bg-blue-50">冰飲</span>
                             <div class="flex items-center">
                                 <div class="qty-btn minus-btn" onclick="updateCart('${item.id}', 'cold', -1)">-</div>
                                 <span class="mx-2 font-bold w-4 text-center text-sm" id="qty-${item.id}-cold">0</span>
@@ -176,17 +192,13 @@
                             </div>
                         </div>`;
                 } else if (item.type === 1 || item.type === 0) {
-                    const label = item.type === 1 ? '僅熱飲' : '僅冰飲';
-                    const theme = item.type === 1 ? 'hot-theme' : 'cold-theme';
                     const variant = item.type === 1 ? 'hot' : 'cold';
+                    const theme = item.type === 1 ? 'hot-theme' : 'cold-theme';
                     controls = `
-                        <div class="flex items-center justify-between mt-2">
-                            <span class="text-xs font-bold ${item.type === 1 ? 'text-red-500' : 'text-blue-500'} mr-2">${label}</span>
-                            <div class="flex items-center">
-                                <div class="qty-btn minus-btn" onclick="updateCart('${item.id}', '${variant}', -1)">-</div>
-                                <span class="mx-2 font-bold w-4 text-center text-sm" id="qty-${item.id}-${variant}">0</span>
-                                <div class="qty-btn plus-btn ${theme}" onclick="updateCart('${item.id}', '${variant}', 1)">+</div>
-                            </div>
+                        <div class="flex items-center justify-end mt-2">
+                            <div class="qty-btn minus-btn" onclick="updateCart('${item.id}', '${variant}', -1)">-</div>
+                            <span class="mx-2 font-bold w-4 text-center text-sm" id="qty-${item.id}-${variant}">0</span>
+                            <div class="qty-btn plus-btn ${theme}" onclick="updateCart('${item.id}', '${variant}', 1)">+</div>
                         </div>`;
                 } else {
                     controls = `
@@ -199,14 +211,13 @@
 
                 return `
                 <div class="bg-white p-3 rounded-2xl flex shadow-sm border border-gray-100">
-                    <img src="${item.img}" class="w-24 h-24 rounded-xl object-cover mr-4 flex-shrink-0">
+                    <img src="${item.img}" class="w-20 h-20 rounded-xl object-cover mr-3 flex-shrink-0">
                     <div class="flex-1 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start">
-                                <h3 class="font-bold text-gray-800">${item.name}</h3>
-                                <span class="text-gray-900 font-bold">$${item.price}</span>
+                                <h3 class="font-bold text-gray-800 text-sm">${item.name}</h3>
+                                <span class="text-stone-700 font-bold">$${item.price}</span>
                             </div>
-                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">${item.desc}</p>
                         </div>
                         ${controls}
                     </div>
@@ -235,19 +246,8 @@
             document.getElementById('total-count').innerText = totalQty;
             document.getElementById('subtotal-price').innerText = foodPrice;
             const submitBtn = document.getElementById('submit-btn');
-            if (totalQty === 0) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = "請先選擇商品";
-            } else {
-                submitBtn.disabled = false;
-                submitBtn.innerText = `送出訂單 (總計 $${foodPrice})`;
-            }
-        }
-
-        function updateOrderType() {
-            const type = document.querySelector('input[name="orderType"]:checked').value;
-            const tableInput = document.getElementById('tableNumber');
-            tableInput.placeholder = type === '內用' ? '內用桌號(外桌 or 內桌) *' : '稱謂：(選填)例：林小姐';
+            submitBtn.disabled = totalQty === 0;
+            submitBtn.innerText = totalQty === 0 ? "請先選擇商品" : `送出訂單 (總計 $${foodPrice})`;
         }
 
         function updatePaymentHint() {
@@ -256,16 +256,9 @@
         }
 
         function submitOrder() {
-            const name = document.getElementById('customerName').value.trim();
-            const table = document.getElementById('tableNumber').value.trim();
             const type = document.querySelector('input[name="orderType"]:checked').value;
             const note = document.getElementById('customerNote').value.trim();
             const payment = document.querySelector('input[name="payment"]:checked').value;
-
-            if (!name || (type === '內用' && !table)) {
-                alert('請填寫「桌號」(外桌 or 內桌)！');
-                return;
-            }
 
             let details = "", total = 0;
             for (const [key, qty] of Object.entries(cart)) {
@@ -279,8 +272,7 @@
                 }
             }
 
-            const message = `【${type}訂單】${payment}\n` +
-                            `📍 桌號/編號：${table || '無'}\n` +
+            const message = `【${type}】${payment}\n` +
                             `📝 備註：${note || '無'}\n` +
                             `------------------\n${details}` +
                             `------------------\n💰 總金額：$${total}`;
