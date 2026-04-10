@@ -120,8 +120,8 @@
             { id: 'ice4', name: '阿尼亞', price: 150, type: 0, desc: '咖啡基底乳酸氣泡特調', img: 'https://placehold.co/100x100/ff6f00/fff?text=Anya' },
             { id: 'f1', name: '原味鬆餅', price: 50, type: null, desc: ' ', img: 'https://placehold.co/100x100/ffb74d/fff?text=Waffle' },
             { id: 'f2', name: '榛果巧克力鬆餅', price: 70, type: null, desc: '榛果巧克力醬', img: 'https://placehold.co/100x100/5d4037/fff?text=ChocoWaffle' },
-            { id: 'f3', name: '草莓果醬鬆餅', price: 70, type: null, desc: '草莓果醬', img: 'https://placehold.co/100x100/e91e63/fff?text=BerryWaffle' },
-            { id: 'f4', name: 'Ｑ心麻糬鬆餅', price: 100, type: null, desc: '內餡Q彈麻糬', img: 'https://placehold.co/100x100/fff9c4/333?text=Mochi' },
+            { id: 'f3', name: '草莓果醬鬆餅', price: 70, type: null, desc: '草莓果醬', img: 'https://placehold.co/100x100/e91e63/fff?text=StrawberryWaffle' },
+            { id: 'f4', name: 'Ｑ心麻糬鬆餅', price: 100, type: null, desc: '內餡Q彈麻糬', img: 'https://placehold.co/100x100/fff9c4/333?text=MochiWaffle' },
             { id: 'f5', name: '嘉年華鬆餅', price: 120, type: null, desc: '三種味道一次滿足', img: 'https://placehold.co/100x100/f48fb1/fff?text=Carnival' },
             { id: 's1', name: '香絲(小)', price: 30, type: null, desc: '烘烤鱈魚香絲', img: 'https://placehold.co/100x100/ffecb3/333?text=Codfish' },
             { id: 's2', name: '香絲(大)', price: 60, type: null, desc: '烘烤鱈魚香絲', img: 'https://placehold.co/100x100/ffecb3/333?text=Codfish' },
@@ -247,7 +247,7 @@
         function updateOrderType() {
             const type = document.querySelector('input[name="orderType"]:checked').value;
             const tableInput = document.getElementById('tableNumber');
-            tableInput.placeholder = type === '內用' ? '內用桌號 *' : '外帶取餐號 (選填)';
+            tableInput.placeholder = type === '內用' ? '內用桌號(外桌 or 內桌) *' : '稱謂：(選填)例：林小姐';
         }
 
         function updatePaymentHint() {
