@@ -62,7 +62,7 @@
                     </label>
                 </div>
 
-                <input type="text" id="tableNumber" placeholder="內用桌號(外桌or內桌)*" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm">
+                <input type="text" id="tableNumber" placeholder="內用桌號(外桌 or 內桌)*" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm">
                 <textarea id="customerNote" rows="1" placeholder="備註" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-sm"></textarea>
 
                 <div class="pt-2">
@@ -114,7 +114,7 @@
             { id: 'h1', name: '高山冬片茶', price: 100, type: 1, desc: '現泡熱茶', img: 'https://placehold.co/100x100/689f38/fff?text=Tea' },
             { id: 'h2', name: '草莓風味果茶', price: 120, type: 1, desc: '酸甜莓果香氣', img: 'https://placehold.co/100x100/e91e63/fff?text=StrawberryTea' },
             { id: 'h3', name: '麝香葡萄風味茶', price: 150, type: 1, desc: '濃郁葡萄果香', img: 'https://placehold.co/100x100/8e24aa/fff?text=GrapeTea' },
-            { id: 'ice1', name: '可爾必思', price: 50, type: 0, desc: '乳酸氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Calpis' },
+            { id: 'ice1', name: '可爾必思', price: 60, type: 0, desc: '乳酸氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Calpis' },
             { id: 'ice2', name: '春梅', price: 100, type: 0, desc: '青梅醋氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Plum' },
             { id: 'ice3', name: '夏戀', price: 100, type: 0, desc: '石榴醋氣泡飲', img: 'https://placehold.co/100x100/039be5/fff?text=Pomegranate' },
             { id: 'ice4', name: '阿尼亞', price: 150, type: 0, desc: '咖啡基底乳酸氣泡特調', img: 'https://placehold.co/100x100/ff6f00/fff?text=Anya' },
@@ -263,7 +263,7 @@
             const payment = document.querySelector('input[name="payment"]:checked').value;
 
             if (!name || (type === '內用' && !table)) {
-                alert('請填寫「稱呼」與「桌號」！');
+                alert('請填寫「桌號」(外桌 or 內桌)！');
                 return;
             }
 
@@ -280,7 +280,6 @@
             }
 
             const message = `【${type}訂單】${payment}\n` +
-                            `👤 稱呼：${name}\n` +
                             `📍 桌號/編號：${table || '無'}\n` +
                             `📝 備註：${note || '無'}\n` +
                             `------------------\n${details}` +
