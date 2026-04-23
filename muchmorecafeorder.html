@@ -149,7 +149,18 @@
         let cart = {}; 
 
         document.addEventListener('DOMContentLoaded', function() {
-            liff.init({ liffId: YOUR_LIFF_ID }).catch(err => console.error(err));
+            liff.init({ liffId: YOUR_LIFF_ID })
+                .then(() => {
+                    // 核心檢查：如果沒登入，強制導向 LINE 登入頁面領取權限
+                    if (!liff.isLoggedIn()) {
+                        liff.login(); 
+                    } else {
+                        console.log("LIFF 登入成功");
+                        checkBusinessHours();
+                        renderMenu();
+                    }
+                })
+                .catch(err => console.error(err));
             checkBusinessHours();
             renderMenu();
         });
