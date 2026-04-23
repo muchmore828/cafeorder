@@ -149,32 +149,32 @@
         let cart = {}; 
 
         document.addEventListener('DOMContentLoaded', function() {
-            liff.init({ liffId: YOUR_LIFF_ID }) // 這裡請填入各自頁面的 LIFF ID
+            liff.init({ liffId: YOUR_LIFF_ID })
                 .then(() => {
-                    // 第一步：檢查是否是在 LINE 內開啟
-                    if (!liff.isInClient()) {
-                        console.log("非 LINE 環境預覽");
-                        // 非 LINE 環境則不執行後續，避免報錯
-                        checkBusinessHours(); 
-                        renderMenu();
-                        return;
-                    }
-
-                    // 第二步：強制檢查登入狀態（這是解決報錯的關鍵！）
-                    if (!liff.isLoggedIn()) {
-                        console.log("尚未登入授權，導向登入頁...");
-                        liff.login(); // 這裡會強制彈出授權畫面，領取發送訊息權限
+                    if (liff.isInClient()) {
+                        // 在 LINE 內，若沒登入則強制登入，且不繼續執行後續代碼，直到登入跳轉
+                        if (!liff.isLoggedIn()) {
+                            liff.login();
+                        } else {
+                            // 已登入，正常初始化
+                            checkBusinessHours();
+                            renderMenu();
+                        }
                     } else {
-                        console.log("授權成功，載入內容...");
+                        // 非 LINE 環境（電腦瀏覽器）
+                        console.log("非 LINE 環境預覽");
                         checkBusinessHours();
                         renderMenu();
                     }
                 })
                 .catch(err => {
-                    alert("初始化失敗，請重新開啟頁面：" + err.message);
+                    // 發生錯誤時的處理
+                    console.error('LIFF 初始化失敗', err);
+                    checkBusinessHours();
+                    renderMenu();
                 });
         });
-
+        
         function checkBusinessHours() {
             const now = new Date();
             const hour = now.getHours();
