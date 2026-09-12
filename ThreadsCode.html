@@ -18,7 +18,7 @@
         <!-- 頂部標題區 -->
         <div class="bg-gradient-to-r from-amber-800 to-stone-700 text-white p-6 text-center">
             <h1 class="text-2xl font-bold tracking-wide">☕ 命理咖啡工作室：AI 內容長</h1>
-            <p class="text-amber-200 text-sm mt-1">內建學習記憶庫 ＋ 嚴格字數控管 ＋ 一鍵生成視覺小卡</p>
+            <p class="text-amber-200 text-sm mt-1">內建學習記憶庫 ＋ 嚴格字數控管 ＋ 一鍵視覺小卡生成</p>
         </div>
 
         <!-- 內容操作區 -->
@@ -92,7 +92,7 @@
             <!-- 結果顯示區：圖片預覽 -->
             <div class="mt-6 border-t border-stone-200 pt-6">
                 <div class="flex justify-between items-center mb-3">
-                    <label class="block text-sm font-semibold text-stone-700">5. 專屬粉彩蠟筆風視覺小卡預覽（Imagen 3 生圖）</label>
+                    <label class="block text-sm font-semibold text-stone-700">5. 專屬粉彩蠟筆風視覺小卡預覽（Imagen 3）</label>
                     <button onclick="generateImage()" id="imageBtn" class="text-xs bg-amber-800 hover:bg-amber-900 text-white px-3 py-1.5 rounded-lg font-medium transition">
                         🎨 重新生成圖片
                     </button>
@@ -179,7 +179,6 @@
             `;
 
             try {
-                // 已更新為最新的 gemini-3.6-flash 模型
                 const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent', {
                     method: 'POST',
                     headers: {
@@ -218,9 +217,10 @@
             imageBtn.innerText = '🎨 繪製中...';
             imageArea.innerHTML = `<div class="flex flex-col items-center justify-center py-10 space-y-2"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-800"></div><p class="text-xs text-amber-800">正在透過 Imagen 3 繪製粉彩蠟筆風小卡...</p></div>`;
 
-            const imagePrompt = `Pastel crayon illustration style, warm cozy tarot and coffee studio aesthetic, featuring a cute chubby orange cat named Kento sleeping or sitting near a coffee cup, soft warm pastel colors, high quality digital art, aesthetic social media card, with space for text: ${keyword}`;
+            const imagePrompt = `Pastel crayon illustration style, warm cozy tarot and coffee studio aesthetic, featuring a cute chubby orange cat named Kento sleeping or sitting near a coffee cup, soft warm pastel colors, high quality digital art, aesthetic social media card, theme: ${keyword}`;
 
             try {
+                // 使用相容性更高的標準預測端點與擴充解析
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict`, {
                     method: 'POST',
                     headers: {
@@ -234,8 +234,15 @@
                 });
 
                 const data = await response.json();
-                if (data.predictions && data.predictions[0].bytesBase64Encoded) {
-                    const base64Image = data.predictions[0].bytesBase64Encoded;
+                console.log("Imagen API 回傳結構：", data); // 方便 F12 檢查
+
+                // 容錯解析：同時支援多種可能的欄位回傳結構
+                let base64Image = null;
+                if (data.predictions && data.predictions[0]) {
+                    base64Image = data.predictions[0].bytesBase64Encoded || data.predictions[0].imageBytes || data.predictions[0].content;
+                }
+
+                if (base64Image) {
                     imageArea.innerHTML = `
                         <div class="space-y-3 text-center">
                             <img src="data:image/jpeg;base64,${base64Image}" class="max-h-72 rounded-lg mx-auto shadow-md border border-stone-200" alt="工作室小卡預覽">
@@ -245,7 +252,7 @@
                         </div>
                     `;
                 } else {
-                    throw new Error('圖片生成回應格式不符');
+                    throw new Error('找不到圖片二進位資料欄位（可能需要確認該 API Key 是否開通 Imagen 模型存取權限）');
                 }
             } catch (error) {
                 console.error(error);
