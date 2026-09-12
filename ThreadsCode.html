@@ -18,7 +18,7 @@
         <!-- 頂部標題區 -->
         <div class="bg-gradient-to-r from-amber-800 to-stone-700 text-white p-6 text-center">
             <h1 class="text-2xl font-bold tracking-wide">☕ 命理咖啡工作室：AI 內容長</h1>
-            <p class="text-amber-200 text-sm mt-1">精準控字 (250-400字) ＋ 文案與小卡視覺靈感同步生成</p>
+            <p class="text-amber-200 text-sm mt-1">內建學習記憶庫 ＋ 嚴格 250-400 字黃金長度控管</p>
         </div>
 
         <!-- 內容操作區 -->
@@ -32,6 +32,17 @@
                     <button onclick="saveApiKey()" class="bg-stone-700 hover:bg-stone-800 text-white text-xs px-4 py-2 rounded-lg font-medium transition whitespace-nowrap">儲存金鑰</button>
                 </div>
                 <p class="text-[11px] text-stone-500 mt-1">金鑰僅會保存在你自己的瀏覽器本機端（LocalStorage），不會外泄。</p>
+            </div>
+
+            <!-- 學習記憶庫：工作室偏好設定 -->
+            <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="block text-xs font-semibold text-stone-700">🧠 工作室專屬學習記憶庫（AI 內容長的長期偏好）</label>
+                    <button onclick="clearMemory()" class="text-[10px] text-red-600 hover:underline">清除記憶重置</button>
+                </div>
+                <p class="text-[11px] text-stone-500 mb-2">這裡會自動累積你對文案的風格反饋與工作室調性，讓 AI 越用越懂你：</p>
+                <textarea id="memoryBox" placeholder="例如：多多老師喜歡溫柔帶點日常陪伴感的語氣，常提到橘貓Kento，避開說教感..." class="w-full p-2.5 text-xs border border-stone-300 rounded-lg bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none h-20"></textarea>
+                <button onclick="saveMemory()" class="mt-2 bg-amber-700 hover:bg-amber-800 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">💾 儲存並更新 AI 長期記憶</button>
             </div>
 
             <!-- 選擇主題類型 -->
@@ -63,19 +74,19 @@
 
             <!-- 按鈕 -->
             <button onclick="generateAIScript()" id="generateBtn" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition duration-200 flex items-center justify-center space-x-2">
-                <span>✨ 呼叫 AI 內容長，同步生成文案與小卡視覺！</span>
+                <span>✨ 呼叫 AI 內容長，結合學習記憶開始創作！</span>
             </button>
 
             <!-- 結果顯示區 -->
             <div class="mt-8 border-t border-stone-200 pt-6">
                 <div class="flex justify-between items-center mb-3">
-                    <label class="block text-sm font-semibold text-stone-700">4. AI 內容長產出（精煉文案 250-400 字 ＋ 小卡視覺設計）</label>
+                    <label class="block text-sm font-semibold text-stone-700">4. AI 內容長產出（嚴格 250-400 字黃金長度 ＋ 視覺指引）</label>
                     <button onclick="copyResult()" class="text-xs bg-stone-200 hover:bg-stone-300 text-stone-700 px-3 py-1.5 rounded-lg font-medium transition">
                         📋 複製全文
                     </button>
                 </div>
                 <div id="outputArea" class="w-full h-96 p-4 border border-stone-300 rounded-xl bg-stone-50 text-stone-700 whitespace-pre-wrap overflow-y-auto text-sm leading-relaxed">
-請先在上方填入您的 Gemini API Key (AQ.開頭)，選擇發文類型與關鍵字，點擊按鈕後，AI 內容長就會為您產出 250-400 字的黃金長度文案與實體小卡視覺！
+請先在上方填入您的 Gemini API Key，並可透過「學習記憶庫」告訴 AI 你的工作室偏好，隨後點擊按鈕開始創作！
                 </div>
             </div>
 
@@ -88,28 +99,51 @@
             if (savedKey) {
                 document.getElementById('apiKeyInput').value = savedKey;
             }
+
+            const savedMemory = localStorage.getItem('studio_memory');
+            if (savedMemory) {
+                document.getElementById('memoryBox').value = savedMemory;
+            } else {
+                // 預設工作室基礎記憶
+                const defaultMemory = "工作室核心：命理咖啡工作室，多多老師經營，有可愛橘貓Kento。風格為粉彩蠟筆風格（pastel crayon style），溫暖療癒、拒絕說教，擅長將咖啡與心靈命理結合。";
+                document.getElementById('memoryBox').value = defaultMemory;
+                localStorage.setItem('studio_memory', defaultMemory);
+            }
         }
 
         function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             if (key) {
                 localStorage.setItem('gemini_api_key', key);
-                alert('API Key 已成功儲存於瀏覽器！');
+                alert('API Key 已成功儲存！');
             } else {
                 alert('請輸入有效的 API Key');
             }
         }
 
+        function saveMemory() {
+            const memory = document.getElementById('memoryBox').value.trim();
+            localStorage.setItem('studio_memory', memory);
+            alert('🧠 AI 內容長的長期記憶已成功更新！');
+        }
+
+        function clearMemory() {
+            localStorage.removeItem('studio_memory');
+            document.getElementById('memoryBox').value = '';
+            alert('記憶已重置！');
+        }
+
         async function generateAIScript() {
             const apiKey = document.getElementById('apiKeyInput').value.trim();
             if (!apiKey) {
-                alert('請先設定您的 Gemini API Key 才能使用 AI 內容長功能喔！');
+                alert('請先設定您的 Gemini API Key 喔！');
                 return;
             }
 
             const contentType = document.getElementById('contentType').value;
             const toneType = document.getElementById('toneType').value;
             const keyword = document.getElementById('keywordInput').value.trim();
+            const userMemory = document.getElementById('memoryBox').value.trim();
 
             if (!keyword) {
                 alert('請輸入核心關鍵字或靈感主題！');
@@ -120,31 +154,30 @@
             const outputArea = document.getElementById('outputArea');
             
             btn.disabled = true;
-            btn.innerText = '☕ AI 內容長正在烘焙 250-400 字精煉文案與視覺小卡中...';
-            outputArea.innerText = '✨ 靈感與視覺構圖生成中，請稍候...';
+            btn.innerText = '☕ AI 內容長正在調閱工作室記憶並精煉 250-400 字中...';
+            outputArea.innerText = '✨ 靈感生成中，請稍候...';
 
             const prompt = `
-你是「命理咖啡工作室」的專屬 AI 內容長。你與多多老師、工作室的可愛橘貓 Kento 並肩作戰，認真看待每一次發文。
+你是「命理咖啡工作室」的專屬 AI 內容長。
 
-工作室的核心美學與視覺基調是：溫暖的手作感、低飽和的粉彩蠟筆風格（pastel crayon style）、充滿咖啡香與貓咪陪伴的療癒氛圍。
+【工作室長期記憶與偏好背景（你必須永遠記住並融入這些精神）】：
+${userMemory}
 
-請嚴格根據以下條件創作：
+【本次創作條件】：
 - 發文類型：${contentType}
-  * 如果是 coffee：純文字散文碎碎念（**絕對不要**寫成影片秒數與運鏡）。
-  * 如果是 pov：POV 沉浸式短影片腳本。
-  * 如果是 tarot：塔羅/卡牌指引與心理測驗互動文案。
-  * 如果是 stems：十天干運勢與日常心靈提醒文字。
-
+  * coffee：純文字散文碎碎念（**絕對不要**寫成影片秒數與運鏡）。
+  * pov：POV 沉浸式短影片腳本。
+  * tarot：塔羅/卡牌指引與心理測驗互動文案。
+  * stems：十天干運勢與日常心靈提醒文字。
 - 文案語調：${toneType}
 - 核心主題/關鍵字：${keyword}
 
 【絕對嚴格字數限制】
-- **社群正文的字數必須嚴格控制在 250 到 400 個中文字之間**。不囉嗦、直擊人心、非常適合 Threads / IG 閱讀。
+- **社群正文的字數必須嚴格控制在 250 到 400 個中文字之間**。直擊人心，非常適合 Threads / IG 閱讀。
 
 【輸出格式要求】
-請精準分段輸出以下兩部分：
-1. 【社群正文 / 腳本內容】：（嚴格 250-400 字內，包含吸引目光的 Hook 與 3-5 個精準 Hashtag）
-2. 【實體小卡視覺生成指引】：（為這篇貼文設計一張數位小卡的畫面描述，包含：粉彩蠟筆風格畫面、橘貓 Kento 的動作、排版金句、色彩配置，讓你可以直接拿到 AI 生圖工具或 Canva 中快速製作）
+1. 【社群正文 / 腳本內容】：（嚴格 250-400 字內，包含 Hook 與 3-5 個 Hashtag）
+2. 【實體小卡視覺生成指引】：（粉彩蠟筆風格畫面、Kento 貓咪配置、金句排版）
 
 【絕對遵守規則】
 1. 絕對不要加上任何像「這是一份為你量身打造的...」的對話開場白。
@@ -179,14 +212,14 @@
                 outputArea.innerText = `❌ 生成失敗：${error.message}\n請確認您的 AQ. 金鑰是否正確。`;
             } finally {
                 btn.disabled = false;
-                btn.innerText = '✨ 呼叫 AI 內容長，同步生成文案與小卡視覺！';
+                btn.innerText = '✨ 呼叫 AI 內容長，結合學習記憶開始創作！';
             }
         }
 
         function copyResult() {
             const outputText = document.getElementById('outputArea').innerText;
             navigator.clipboard.writeText(outputText).then(() => {
-                alert('已成功複製全文（含文案與小卡視覺指引）！');
+                alert('已成功複製全文！');
             }).catch(err => {
                 console.error('複製失敗', err);
             });
